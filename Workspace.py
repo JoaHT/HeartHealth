@@ -1,3 +1,4 @@
+
 #This project will focus on Heart health, what connections we can draw from excisting information 
 #and if they have an impact on heart attacks through machine learning algorhitms. As well as 
 #making an informative dashboard on the information we will acquire. 
@@ -50,14 +51,17 @@ data_new['Smoker'].unique()
 
 data_new.info()
 
+#Here we split Blood Pressure into two different columns so they work in the MLA
 data_new[['Systolic Blood Pressure','Diastolic Blood Pressure']] = data_new['Blood Pressure(mmHg)'].str.split('/',n=1, expand=True)
 data_new.head()
 
 data_mla = data_new.drop(['Name','Blood Pressure(mmHg)'], axis=1)
 
+#Getting dummies for Gender so that we can get proper results through the MLA
 data_mla = pd.get_dummies(data_mla, columns=['Gender'], drop_first=True)
 data_mla.head()
 
+#Now we are going to instantiate the MLA
 y = data_mla['Heart Attack']
 x = data_mla.copy()
 x = data_mla.drop('Heart Attack', axis=1)
@@ -78,6 +82,7 @@ rf_cv = GridSearchCV(rf, cv_params, scoring=scoring, cv=5, refit='recall')
 
 rf_cv.fit(X_train, Y_train)
 
+#After fitting we can see that we are getting quite good results
 rf_cv.best_params_
 
 rf_cv.best_estimator_
@@ -96,6 +101,7 @@ print('Recall:', recall,'\n'
       'Precision:', precision,'\n'
       'F1', f1,'\n')
 
+
 cm = confusion_matrix(Y_test, y_pred)
 ConfusionMatrixDisplay(confusion_matrix=cm).plot()
 
@@ -105,3 +111,4 @@ feature_importance.plot.barh(color='green')
 plt.xlabel('Importance')
 plt.ylabel("Feature")
 plt.title('Heart Attack Feature Importance')
+
